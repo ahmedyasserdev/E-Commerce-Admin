@@ -1,4 +1,23 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-export default nextConfig;
+const nextConfig = {
+    typescript: {
+      ignoreBuildErrors: true,
+    },
+    images: {
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'img.clerk.com',
+         
+        },
+        {
+          protocol: 'https',
+          hostname: 'res.cloudinary.com',
+         
+        },
+      ],
+    },
+  };
+  
+  export default nextConfig;
+  

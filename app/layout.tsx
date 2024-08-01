@@ -22,10 +22,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <ClerkProvider>
+      <ClerkProvider afterSignOutUrl={'/sign-in'}>
         <html lang="en">
       <body className={inter.className}>
-        <main className="h-full " >
+        <main className="h-full container" >
           <ToastProvider  />
           <ModalProvider/>
         {children}

@@ -74,7 +74,7 @@ html , body , :root {
 
 @layer utilities {
   .container {
-    @apply max-w-[90%] mx-auto overflow-hidden;
+    @apply max-w-[95%] mx-auto overflow-hidden;
   }
 
   .flex-center {

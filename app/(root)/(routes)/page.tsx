@@ -1,7 +1,6 @@
 'use client'
-import Modal from "@/components/ui/modal";
+import Modal from "@/components/shared/modal";
 import { useStoreModal } from "@/hooks/use-store-modal";
-import Image from "next/image";
 import { useEffect } from "react";
 
 export default function SetupPage() {
@@ -12,9 +11,5 @@ export default function SetupPage() {
           onOpen();
       }
   }  , [isOpen , onOpen ])
-  return (
-    <div>
-        Children
-    </div>
-  );
+  return null;
 }
