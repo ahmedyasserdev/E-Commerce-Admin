@@ -3,9 +3,9 @@
 import Heading from "@/components/shared/Heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { BillboardFormSchema } from "@/schemas";
+import { CategoryFormSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Billboard } from "@prisma/client";
+import {Billboard, Category } from "@prisma/client";
 import { Trash } from "lucide-react";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -17,6 +17,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import * as z from "zod";
 import toast from "react-hot-toast";
@@ -24,56 +31,55 @@ import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import AlertModal from "@/components/modals/AlertModal";
 import { useOrigin } from "@/hooks/use-origin";
-import ImageUploader from "@/components/shared/ImageUploader";
-type BillboardFormValues = z.infer<typeof BillboardFormSchema>;
-const BillboardForm = ({ initialData }: { initialData: Billboard | null }) => {
+ type CategoryFormValues = z.infer<typeof CategoryFormSchema>;
+const CategoryForm = ({ initialData , billboards }: { initialData: Category | null ; billboards : Billboard[] }) => {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const title = initialData ? "Edit Billboard" : "Create Billboard";
-  const description = initialData ? "Edit a Billboard" : "Add a new Billboard";
-  const toastMessage = initialData ? "Billboard updated!" : "Billboard Created!";
+  const title = initialData ? "Edit Category" : "Create Category";
+  const description = initialData ? "Edit a Category" : "Add a new Category";
+  const toastMessage = initialData ? "Category updated!" : "Category Created!";
   const action = initialData ? "Save changes" : "Create";
   const params = useParams();
-  const form = useForm<BillboardFormValues>({
-    resolver: zodResolver(BillboardFormSchema),
+  const form = useForm<CategoryFormValues>({
+    resolver: zodResolver(CategoryFormSchema),
     defaultValues: initialData || {
-      label: "",
-      imageUrl: "",
+      name: "",
+      billboardId: "",
     },
   });
 
 
-  const onSubmit = (values: BillboardFormValues) => {
+  const onSubmit = (values: CategoryFormValues) => {
     startTransition(async () => {
       try {
         if (initialData) {
           await axios.patch(
-            `/api/${params?.storeId}/billboards/${params.billboardId}`,
+            `/api/${params?.storeId}/categories/${params.categoryId}`,
             values
           );
         } else {
-          await axios.post(`/api/${params.storeId}/billboards`, values);
+          await axios.post(`/api/${params.storeId}/categories`, values);
         }
         toast.success(toastMessage);
         router.refresh();
-        router.push(`/${params.storeId}/billboards`);
+        router.push(`/${params.storeId}/categories`);
       } catch (error) {
         toast.error("Something went wrong ");
       }
     });
   };
 
-  const deletedBillboard = () => {
+  const deletedCategory = () => {
     startTransition(async () => {
       try {
-        await axios.delete(`/api/${params.storeId}/billboards/${params?.billboardId}`);
+        await axios.delete(`/api/${params.storeId}/categories/${params?.categoryId}`);
         router.refresh();
-        router.push(`/${params.storeId}/billboards`);
-        toast.success("Billboard deleted successfully!");
+        router.push(`/${params.storeId}/categories`);
+        toast.success("Category deleted successfully!");
       } catch (error) {
         toast.error(
-          "Make sure you remove all categories using this billboard first"
+          "Make sure you remove all products using this Category first"
         );
       }
     });
@@ -84,7 +90,7 @@ const BillboardForm = ({ initialData }: { initialData: Billboard | null }) => {
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={deletedBillboard}
+        onConfirm={deletedCategory}
         isPending={isPending}
       />
 
@@ -110,40 +116,49 @@ const BillboardForm = ({ initialData }: { initialData: Billboard | null }) => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          <FormField
-            control={form.control}
-            name="imageUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Background Image</FormLabel>
-                <FormControl>
-                  <ImageUploader
-                    disabled={isPending}
-                    value={field.value ? [field.value] : []}
-                    onChange={(url) => field.onChange(url)}
-                    onRemove={(ur) => field.onChange("")}
-                  />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
+      
           <div className="grid grid-cols-3  gap-8 ">
             <FormField
               control={form.control}
-              name="label"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Label</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Billboard label"
+                      placeholder="Category Name"
                       disabled={isPending}
                       {...field}
                     />
                   </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="billboardId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Billboard</FormLabel>
+                  <Select disabled = {isPending} defaultValue= {field.value} value = {field.value} onValueChange={field.onChange} >
+                    <FormControl>
+                    <SelectTrigger>
+                      <SelectValue  placeholder="Select a billboard" defaultValue={field.value} />
+                    </SelectTrigger>
+
+                    </FormControl>
+
+                    <SelectContent>
+                    {
+                      billboards.map((billboard) => (
+                        <SelectItem key = {billboard.id} value = {billboard.id} >{billboard.label}</SelectItem>
+                      ))
+                    }
+                    </SelectContent>
+
+                  </Select>
 
                   <FormMessage />
                 </FormItem>
@@ -161,4 +176,4 @@ const BillboardForm = ({ initialData }: { initialData: Billboard | null }) => {
   );
 };
 
-export default BillboardForm;
+export default CategoryForm;

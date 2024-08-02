@@ -27,8 +27,9 @@ const BillboardPage = async ({params : {billboardId}} : {params : {billboardId :
      billboard = await db.billboard.findUnique({
       where : {
         id : billboardId
-      }
-    })
+      },
+    
+    });
   }
 
   return (

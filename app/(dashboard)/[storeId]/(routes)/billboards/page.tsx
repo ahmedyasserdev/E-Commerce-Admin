@@ -27,8 +27,8 @@ const BillboardsPage = async ({
   }))
 
   return (
-    <section className="flex-col">
-      <div className="flex-1 space-y-4 pt-6">
+    <section className="">
+      <div className=" space-y-4 pt-6 ">
         <BillboardClient data={formattedBillboards} />
       </div>
     </section>

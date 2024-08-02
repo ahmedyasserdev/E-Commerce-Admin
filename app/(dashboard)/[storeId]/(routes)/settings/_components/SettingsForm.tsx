@@ -25,7 +25,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import AlertModal from "@/components/modals/AlertModal";
 import ApiAlert from "@/components/shared/ApiAlert";
-import { useOrigin } from "@/hooks/user-origin";
+import { useOrigin } from "@/hooks/use-origin";
 type SettingsFormValues = z.infer<typeof SettingsFormSchema>;
 const SettingsForm = ({ initialData }: { initialData: Store }) => {
   const [open, setOpen] = useState(false);

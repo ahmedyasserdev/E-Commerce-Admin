@@ -30,7 +30,8 @@ const ApiAlert = ({title , description , variant = "public" } : ApiAlertProps) =
     <Alert>
         <Server  className = "size-4" />
     
-        <AlertTitle className  = "flex items-center gap-x-2 " >{title}
+        <AlertTitle className  = "flex items-center gap-x-2 " >
+            {title}
             <Badge variant = {variantMap[variant]} >{textMap[variant]}</Badge>
         </AlertTitle>
 

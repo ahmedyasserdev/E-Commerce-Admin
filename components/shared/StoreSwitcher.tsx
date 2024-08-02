@@ -50,30 +50,27 @@ export default function StoreSwitcher({
     <Select onValueChange={onStoreSelect}>
       <SelectTrigger
         className={cn(
-          "w-full  border-none focus-visible:ring-transparent focus:ring-transparent transition-all duration-150  ",
+          "select-field",
           className
         )}
       >
         <div className="flex items-center gap-x-2.5 w-[100px]  md:w-[200px] p-medium-14">
           <StoreIcon className="size-6" />
-          <SelectValue placeholder={currentStore?.label} />
+          <SelectValue defaultValue = {currentStore?.value} placeholder={currentStore?.label} />
         </div>
       </SelectTrigger>
 
       <SelectContent>
         {formattedItems.map((item) => (
           <SelectItem
-            className={cn(" p-0 w-full my-2.5 pl-2 ") }
+            className={cn(" p-0 w-full my-2.5 pl-2 ")}
             key={item.value}
             value={item.value}
           >
-              <div className = "flex items-center" >
+            <div className="flex items-center">
               <StoreIcon className="mr-2 size-5" />
-              <p className = "p-regular-16" >{item.label}</p>
-              </div>
-        
-
-           
+              <p className="p-regular-16">{item.label}</p>
+            </div>
           </SelectItem>
         ))}
 
