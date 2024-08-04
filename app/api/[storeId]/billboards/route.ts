@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import {BillboardFormSchema} from "@/schemas"
 import db from "@/lib/db";
-
+import { revalidatePath } from "next/cache";
 export async function POST(
     req: Request,
     { params }: { params: { storeId: string } }
@@ -50,6 +50,8 @@ export async function POST(
                 storeId: params.storeId
             }
         });
+
+        revalidatePath(`/${params.storeId}/billboards`)
 
         return NextResponse.json(billboard);
     } catch (error) {

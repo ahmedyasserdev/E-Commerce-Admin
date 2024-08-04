@@ -1,6 +1,7 @@
 import {NextResponse} from "next/server";
 import {auth} from "@clerk/nextjs/server" 
 import db from '@/lib/db';
+import { revalidatePath } from "next/cache";
 export async function POST (req : Request) {
     try {
         const {userId} = auth();
@@ -17,6 +18,9 @@ export async function POST (req : Request) {
                         userId
                     }
             })
+
+        revalidatePath(`/${store.id}`)
+
     
             return NextResponse.json(store)
     }catch (error) {

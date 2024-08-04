@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { CategoryFormSchema} from "@/schemas"
+import {SizeFormSchema} from "@/schemas"
 import db from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
 export async function POST(
     req: Request,
-    { params }: { params: {  storeId : string   } }
+    { params }: { params: { storeId: string } }
 ) {
     try {
         const { userId } = auth();
@@ -14,7 +14,7 @@ export async function POST(
 
        
 
-            const validatedFields = CategoryFormSchema.safeParse(body)
+            const validatedFields = SizeFormSchema.safeParse(body)
 
         if (!userId) {
             return new NextResponse("Unauthenticated", { status: 401 });
@@ -25,7 +25,7 @@ export async function POST(
         }
 
         
-        const {name , billboardId} = validatedFields.data
+        const {name , value} = validatedFields.data
 
         
 
@@ -44,17 +44,18 @@ export async function POST(
             return new NextResponse("Unauthorized", { status: 403 });
         }
 
-        const category = await db.category.create({
+        const size = await db.size.create({
             data: {
-                name ,
-                billboardId ,
-                storeId : params.storeId
+                name,
+                value,
+                storeId: params.storeId
             }
         });
+        revalidatePath(`/${params.storeId}/sizes`)
 
-        return NextResponse.json(category);
+        return NextResponse.json(size);
     } catch (error) {
-        console.log('[CATEGORIES_POST]', error);
+        console.log('[SIZES_POST]', error);
         return new NextResponse("Internal Error", { status: 500 });
     }
 }
@@ -62,7 +63,7 @@ export async function POST(
 
 export async function GET(
     req: Request,
-    { params }: { params: { storeId : string  ; } }
+    { params }: { params: { storeId: string } }
 ) {
     try {
         const { userId } = auth();
@@ -84,17 +85,16 @@ export async function GET(
             return new NextResponse("Unauthorized", { status: 403 });
         }
 
-        const category = await db.category.findMany({
+        const sizes = await db.size.findMany({
           where : {
             storeId : params.storeId
-        }
+          }
         });
 
-        revalidatePath(`/${params.storeId}/categories`)
 
-        return NextResponse.json(category);
+        return NextResponse.json(sizes);
     } catch (error) {
-        console.log('[CATEGORIES_GET]', error);
+        console.log('[SIZES_GET]', error);
         return new NextResponse("Internal Error", { status: 500 });
     }
 }

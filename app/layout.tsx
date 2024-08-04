@@ -8,10 +8,7 @@ import ToastProvider from "@/providers/ToastProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title:{
-    template: "%s Admin Dashboard",
-    default: "Admin Dashboard",
-  },
+  title :  "Admin Dashboard",
   description: "Admin Dashboard",
 
 };

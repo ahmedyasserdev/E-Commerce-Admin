@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { BillboardColumn } from "./Columns";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,25 +14,26 @@ import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { useTransition, useState } from "react";
 import AlertModal from "@/components/modals/AlertModal";
+import { ColorsColumn } from "./Columns";
 type CellActionProps = {
-  data: BillboardColumn;
+  data: ColorsColumn;
 };
 export const CellAction = ({ data }: CellActionProps) => {
   const [isPending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const params = useParams();
-  const deletedBillboard = () => {
+  const deletedSize = () => {
     startTransition(async () => {
       try {
-        await axios.delete(`/api/${params.storeId}/billboards/${data?.id}`);
+        await axios.delete(`/api/${params.storeId}/colors/${data?.id}`);
         router.refresh();
-        toast.success("Billboard deleted successfully!");
+        toast.success("Size deleted successfully!");
         setOpen(false)
 
       } catch (error) {
         toast.error(
-          "Make sure you remove all categories using this billboard first"
+          "Make sure you remove all categories using this Size first"
         );
       }
     });
@@ -41,14 +41,14 @@ export const CellAction = ({ data }: CellActionProps) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success("Billboard Id copied to the clipboard.");
+    toast.success("Size Id copied to the clipboard.");
   };
   return (
     <>
     <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={deletedBillboard}
+        onConfirm={deletedSize}
         isPending={isPending}
       />
       <DropdownMenu>
@@ -66,7 +66,7 @@ export const CellAction = ({ data }: CellActionProps) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              router.push(`/${params.storeId}/billboards/${data.id}`);
+              router.push(`/${params.storeId}/colors/${data.id}`);
             }}
           >
             {" "}

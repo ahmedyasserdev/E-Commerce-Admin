@@ -1,6 +1,7 @@
 import db from "@/lib/db";
 import { SettingsFormSchema } from "@/schemas";
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -28,6 +29,7 @@ export async function PATCH(
                 name
             }
         })
+        revalidatePath(`/${storeId}`)
 
 
         return NextResponse.json(store)

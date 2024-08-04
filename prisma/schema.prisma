@@ -14,25 +14,26 @@ datasource db {
 }
 
 model Store {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  billboard Billboard[]
-  Category  Category[]
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  userId     String
+  billboards Billboard[]
+  Categories Category[]
+  Sizes      Size[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  Color      Color[]
 }
 
 model Billboard {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  storeId   String     @db.ObjectId
-  store     Store      @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  label     String
-  imageUrl  String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  categories  Category[]
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  storeId    String     @db.ObjectId
+  store      Store      @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  label      String
+  imageUrl   String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  categories Category[]
 
   @@index([storeId])
 }
@@ -40,12 +41,37 @@ model Billboard {
 model Category {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   storeId     String    @db.ObjectId
-  store       Store     @relation(fields: [storeId], references: [id] , onDelete : Cascade)
+  store       Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
   billboardId String    @db.ObjectId
-  billboard  Billboard @relation(fields: [billboardId], references: [id])
-  name String 
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  billboard   Billboard @relation(fields: [billboardId], references: [id])
+  name        String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
   @@index([storeId])
   @@index([billboardId])
+}
+
+model Size {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  store     Store    @relation(fields: [storeId], references: [id])
+  storeId   String   @db.ObjectId
+  name      String
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+}
+
+model Color {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  store     Store    @relation(fields: [storeId], references: [id])
+  storeId   String   @db.ObjectId
+  name      String
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
 }
