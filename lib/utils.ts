@@ -12,3 +12,11 @@ export const billboardToDelete = async(billboardId : string) => {
       await axios.delete(`/api/billboards/${billboardId}`);
    
 };
+
+
+export const priceFormatter = (price : number) => {
+  return new Intl.NumberFormat("en-US", {
+    style : "currency",
+    currency : "USD"
+  }).format(price)
+}

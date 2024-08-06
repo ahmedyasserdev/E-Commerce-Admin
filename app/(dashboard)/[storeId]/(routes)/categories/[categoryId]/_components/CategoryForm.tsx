@@ -31,6 +31,7 @@ import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import AlertModal from "@/components/modals/AlertModal";
 import { useOrigin } from "@/hooks/use-origin";
+import DropdownSelect from "@/components/shared/DropdownSelect";
  type CategoryFormValues = z.infer<typeof CategoryFormSchema>;
 const CategoryForm = ({ initialData , billboards }: { initialData: Category | null ; billboards : Billboard[] }) => {
   const [open, setOpen] = useState(false);
@@ -142,23 +143,25 @@ const CategoryForm = ({ initialData , billboards }: { initialData: Category | nu
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Billboard</FormLabel>
-                  <Select disabled = {isPending} defaultValue= {field.value} value = {field.value} onValueChange={field.onChange} >
+                
                     <FormControl>
-                    <SelectTrigger>
-                      <SelectValue  placeholder="Select a billboard" defaultValue={field.value} />
-                    </SelectTrigger>
-
-                    </FormControl>
-
-                    <SelectContent>
-                    {
+                    <DropdownSelect
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder="Select a Billboard"
+                      disabled={isPending}
+                    >
+                         {
                       billboards.map((billboard) => (
                         <SelectItem key = {billboard.id} value = {billboard.id} >{billboard.label}</SelectItem>
                       ))
                     }
-                    </SelectContent>
+                      
+                       </DropdownSelect>
 
-                  </Select>
+                    </FormControl>
+
+                
 
                   <FormMessage />
                 </FormItem>

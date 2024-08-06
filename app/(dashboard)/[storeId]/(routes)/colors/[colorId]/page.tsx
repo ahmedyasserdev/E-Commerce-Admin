@@ -14,7 +14,7 @@ export async function generateMetadata({
     color = await db.color.findUnique({ where: { id: colorId } });
   }
   return {
-    title: color?.name || "Create color",
+    title:  `${color?.name[0]?.toUpperCase()}${color?.name?.slice(1)}` ||  "Create color",
   };
 }
 

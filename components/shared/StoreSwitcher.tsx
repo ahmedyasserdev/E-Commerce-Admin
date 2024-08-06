@@ -54,7 +54,7 @@ export default function StoreSwitcher({
           className
         )}
       >
-        <div className="flex items-center gap-x-2.5 w-[100px]  md:w-[200px] p-medium-14">
+        <div className="flex items-center truncate gap-x-2.5 w-[100px]  md:w-[200px] p-medium-14 line-clamp-1">
           <StoreIcon className="size-6" />
           <SelectValue defaultValue = {currentStore?.value} placeholder={currentStore?.label} />
         </div>

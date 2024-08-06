@@ -13,12 +13,21 @@ const Navbar = async() => {
   return (
     <div className='border-b '>
         <div className=" h-16 flex items-center ">
-            <div>
+            <div   >
               <StoreSwitcher items = {stores} />
             </div>
+            {/* For medium to large devices */}
+            <div className = "hidden md:block" >
             <MainNav />
+            </div>
 
             <div className = "flex ml-auto space-x-4 items-center" >
+            {/* For Mobile */}
+
+            <div className = "block md:hidden" >
+            <MainNav />
+            </div>
+
                 <UserButton />
             </div>
 

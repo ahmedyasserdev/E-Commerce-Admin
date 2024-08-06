@@ -72,7 +72,7 @@ export async function PATCH (
             }
         });
 
-        revalidatePath(`/${params.storeId}/size`);
+        revalidatePath(`/${params.storeId}/sizes`);
         
         return NextResponse.json(size);
     } catch (error) {

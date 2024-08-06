@@ -137,11 +137,14 @@ const ColorForm = ({ initialData }: { initialData: Color | null }) => {
                 <FormItem>
                   <FormLabel>Value</FormLabel>
                   <FormControl>
+                    <div className="flex items-center gap-x-2">
                     <Input
                       placeholder="Color Value"
                       disabled={isPending}
                       {...field}
                     />
+                    <div  className = 'p-4 border rounded-full' style={{backgroundColor : field.value}} />
+                    </div>
                   </FormControl>
 
                   <FormMessage />
