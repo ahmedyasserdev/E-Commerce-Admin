@@ -16,9 +16,7 @@ export async function POST(
 
             const validatedFields = CategoryFormSchema.safeParse(body)
 
-        if (!userId) {
-            return new NextResponse("Unauthenticated", { status: 401 });
-        }
+      
 
         if (!validatedFields.success) {
             return new NextResponse("Missing  required Fields ", { status: 400 });
@@ -36,7 +34,8 @@ export async function POST(
         const storeByUserId = await db.store.findFirst({
             where: {
                 id: params.storeId,
-                userId
+                userId : userId ? userId : undefined
+
             }
         })
 
@@ -67,9 +66,7 @@ export async function GET(
     try {
         const { userId } = auth();
 
-        if (!userId) {
-            return new NextResponse("Unauthenticated", { status: 401 });
-        }
+      
 
         if (!params.storeId) {
             return new NextResponse("Store Id is required", { status: 400 });
@@ -77,7 +74,8 @@ export async function GET(
         const storeByUserId = await db.store.findFirst({
             where: {
                 id: params.storeId,
-                userId
+                userId : userId ? userId : undefined
+
             }
         })
         if (!storeByUserId) {

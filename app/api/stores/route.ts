@@ -8,14 +8,13 @@ export async function POST (req : Request) {
         const body = await req.json();
 
         const {name }  = body
-        if (!userId) return new NextResponse("Unauthorized", { status: 401 });
     
             if (!name ) return new NextResponse("Name is required", { status: 400 });
     
             const store = await db.store.create({
                     data : {
                         name ,
-                        userId
+                        userId : userId ? userId : undefined
                     }
             })
 

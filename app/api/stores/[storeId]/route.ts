@@ -10,7 +10,6 @@ export async function PATCH(
 ) {
     try {
         const {userId} = auth();
-        if (!userId) return new NextResponse("Unauthorized", { status: 401 });
         const body = await req.json();
 
         const validatedFields = SettingsFormSchema.safeParse(body);
@@ -23,7 +22,8 @@ export async function PATCH(
         const store = await db.store.updateMany({
             where : {
                 id : storeId,
-                userId
+                userId : userId ? userId : undefined
+
             },
             data : {
                 name
@@ -47,15 +47,15 @@ export async function DELETE(
   ) {
       try {
           const {userId} = auth();
-          if (!userId) return new NextResponse("Unauthorized", { status: 401 });
-  
+       
   
           if (!storeId) return new NextResponse("Missing Store Id", { status: 400 });
   
           const store = await db.store.deleteMany({
               where : {
                   id : storeId,
-                  userId
+                  userId : userId ? userId : undefined
+
               },
           })
   

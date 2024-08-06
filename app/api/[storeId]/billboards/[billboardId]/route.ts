@@ -36,9 +36,6 @@ export async function PATCH (
 
         
 
-        if (!userId) {
-            return new NextResponse("Unauthorized", { status: 401 });
-        }
 
         const validatedFields = BillboardFormSchema.safeParse(body)
    
@@ -54,7 +51,8 @@ export async function PATCH (
         const storeByUserId = await db.store.findFirst({
             where: {
                 id: params.storeId,
-                userId
+                userId : userId ? userId : undefined
+
             }
         })
 
@@ -88,9 +86,7 @@ export async function DELETE (
     try {
         const { userId } = auth();
 
-        if (!userId) {
-            return new NextResponse("Unauthorized", { status: 401 });
-        }
+   
 
         if (!params.billboardId) {
             return new NextResponse("Billboard ID is required", { status: 400 });
@@ -99,7 +95,8 @@ export async function DELETE (
         const storeByUserId = await db.store.findFirst({
             where: {
                 id: params.storeId,
-                userId
+                userId : userId ? userId : undefined
+
             }
         })
 
